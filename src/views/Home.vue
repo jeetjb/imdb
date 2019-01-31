@@ -21,6 +21,7 @@
             
           
 
+
           <!-- <span> {{ funt2(actorsdata,movies) }} </span> -->
           </li>
           <li><b>Producers :</b> 
@@ -30,7 +31,7 @@
                   {{ producers.name }}
                 </span>
               </span> -->
-            <span> {{ funt(producersdata,movies) }} </span>
+            <span> {{ filterProd(producersdata,movies) }} </span>
 
           </li>
           <br><br>
@@ -54,14 +55,14 @@ export default {
   },
  
 methods: {
-  funt(data1,data2) {
+  filterProd(data1,data2) {
     var res = data1.filter(dat => dat.id==data2.producer);
     return res[0].name;
   },
-  funt2(data1,data2) {
-    var res = data2.filter(dat => dat==data2.id);;
-    return res;
-  }
+  // funt2(data1,data2) {
+  //   var res = data1.filter(dat => dat==data2.id);;
+  //   return res;
+  // }
 },
   // methods: {
     created()
