@@ -1,23 +1,27 @@
 <template>
   <div id="app">
     <div id="nav">
+      <hr><h2>
       <router-link to="/">Home</router-link> |
-      <router-link to="/add">Add</router-link>
+      <router-link to="/add">Add</router-link></h2>
+      <hr><hr>
     </div>
     <router-view/>
   </div>
 </template>
 
-<style>
+<style  scoped>
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: left;
+  border: #2c3e50;
   color: #2c3e50;
 }
 #nav {
-  padding: 30px;
+  padding: 10px;
+  text-align: center;
 }
 
 #nav a {

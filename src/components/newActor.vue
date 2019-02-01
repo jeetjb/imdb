@@ -7,10 +7,15 @@
               <input type="text" v-model="actorsobj.name"><br><br>
 
               <span>Sex  </span><br>
-              <input type="radio" value="M" v-model="actorsobj.sex">
+              <!-- <input type="radio" value="M" v-model="actorsobj.sex">
               <label>Male</label><br>
               <input type="radio" value="F" v-model="actorsobj.sex">
-              <label>Female</label>
+              <label>Female</label> -->
+              <button-group type="primary" :value.sync="actorsobj.sex">
+                <Radio value="M">Male</Radio>
+                <Radio value="F">Female</Radio>
+    
+                </button-group>
               <br><br>
 
               <span>Date of Birth  </span>
@@ -27,11 +32,10 @@
                   v-model="actorsobj.movies" 
                 > {{mov.id}}.  {{mov.name}}
                 </li>
-                <!-- <li><input type="checkbox" @click="newactor=true"> 4.  Add new</li> -->
                 
                 </ul>
                 <br><br>
-                <button v-on:click.prevent="submitActor">Submit</button>
+                <button v-on:click.prevent="submitActor">Submit</button>    <button type="button" v-on:click.prevent="cancel">Cancel</button>
             </form>
 
             {{newValue}}
@@ -40,6 +44,7 @@
 
 <script>
 import axios from 'axios'
+import { Radio } from 'vue-strap'
 export default {
     
     data () {
@@ -54,17 +59,26 @@ export default {
             }, 
             moviesdata: '',   
             actorsdata: '' ,
-            newact:true
+            newact:true,
+            noup:false
         }
     },
     
     methods: {
         submitActor() {
             this.actorsobj.id++;
-            axios.post('http://localhost:3000/actors',this.actorsobj);
-            this.$emit('newValue',!this.newact)
+            // axios.post('http://localhost:3000/actors',this.actorsobj);
+            // this.$emit('newValue',!this.newact)
+            var self = this; 
+            axios.post('http://localhost:3000/actors',this.actorsobj).then(function(){
+               self.$emit('newValue',!self.newact,self.noup)
+            });
             
         },
+        cancel() {
+        this.$emit('newValue',!this.newact, !this.noup)
+    }
+    
     },
     created() {
         

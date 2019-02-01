@@ -1,10 +1,21 @@
 <template>
-  <div class="home">
-    <h3>Movies</h3>
-    <ul>
-      <li v-for="movies in moviesdata" :key="movies">
-        <ul>
-          
+<div>
+  <b-container fluid class="bv-example-row">
+  <b-row >
+  
+    <b-col md="5" offset-md="2" sm="2">
+      <h3><b>Movies</b></h3>
+      <ol><li v-for="movies in moviesdata" :key="movies" @click="show=movies.id">{{movies.name}}</li>
+      </ol> 
+    </b-col>
+    <b-col>
+      <moviedetails>
+        <br>
+        <h3><b>Movie Details</b></h3>
+        <span v-if="show==''">Select a Movie</span>
+          <span v-for="movies in moviesdata">
+            <span v-if="movies.id==show">
+          <ul>
           <li><b>Movie Name : </b>{{movies.name}}</li>
           <li><b>Year of Release :</b> {{movies.yearOfRelease}}</li>
           <li><b>Actors : </b>
@@ -18,10 +29,6 @@
                 </li> -->
               </div>
             </ol>
-            
-          
-
-
           <!-- <span> {{ funt2(actorsdata,movies) }} </span> -->
           </li>
           <li><b>Producers :</b> 
@@ -36,21 +43,38 @@
           </li>
           <br><br>
         </ul> 
-      </li>
-    </ul> 
-      
-  </div>
+            </span></span>
+          </moviedetails>
+    </b-col>
+  </b-row>
+  
+</b-container>
+
+
+
+
+
+
+
+
+    
+</div>
 </template>
 
 <script>
 import axios from 'axios'
-
+import moviedetails from '../components/moviedetails'
 export default {
+  props: ["newmov"],
+  components : {
+    moviedetails
+  },
   data () {
     return{
         moviesdata: '' ,
         actorsdata: '',
-        producersdata: ''
+        producersdata: '',
+        show:''
     }
   },
  
@@ -92,3 +116,4 @@ methods: {
 
 }
 </script>
+

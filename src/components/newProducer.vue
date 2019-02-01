@@ -31,7 +31,7 @@
           
           </ul>
           <br><br>
-          <button v-on:click.prevent="submitProducer">Submit</button>
+          <button v-on:click.prevent="submitProducer">Submit</button>    <button type="button" v-on:click.prevent="cancel">Cancel</button>
             </form>
         </div>
 </template>
@@ -52,17 +52,27 @@ export default {
             }, 
             moviesdata: '',   
             producersdata: '' ,
-            newprod:true
+            
+                newprod:true,
+                noup:false
+            
         }
     },
     
     methods: {
         submitProducer() {
             this.producersobj.id++;
-            axios.post('http://localhost:3000/producers',this.producersobj);
-            this.$emit('newValue',!this.newprod)
+            // axios.post('http://localhost:3000/producers',this.producersobj);
+            // this.$emit('newValue',!this.newprod)
+            var self = this; 
             
+            axios.post('http://localhost:3000/producers',this.producersobj).then(function(){
+               self.$emit('newValue',!self.newprod, self.noup)
+            });
     },
+    cancel() {
+        this.$emit('newValue',!this.newprod, !this.noup)
+    }
     },
     created() {
         
