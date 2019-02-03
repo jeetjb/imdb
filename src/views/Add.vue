@@ -56,7 +56,7 @@
           </b-form-input>
         </b-form-group>
         <!-- <b-button v-on:click.prevent="submitMovie">Submit</b-button> -->
-        <b-button size="" variant="primary" v-on:click.prevent="submitMovie">Submit</b-button>
+        
           </b-col>
           <b-col sm="6">
             <span class="notbold">
@@ -111,7 +111,7 @@
             <br><br>
           </b-col>
         </b-row>
-    
+    <b-button size="" variant="primary" v-on:click.prevent="submitMovie">Submit</b-button>
     
   </b-container>
         <!-- <span>Poster Image  </span>
@@ -301,6 +301,7 @@ export default {
 .Add {
   margin-left: 7%;
   margin-right:  7%;
+  background-color:#ddffd3;
 }
 .notbold {
   font-weight: normal;

@@ -18,6 +18,8 @@
   -moz-osx-font-smoothing: grayscale;
   border: #2c3e50;
   color: #2c3e50;
+  background-color:#ddffd3;
+  min-height: 100vh;
 }
 #nav {
   padding: 10px;
