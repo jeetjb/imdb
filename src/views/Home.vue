@@ -1,18 +1,20 @@
 <template>
-<div>
+<div class="home">
   <b-container fluid class="bv-example-row">
   <b-row >
-  
-    <b-col md="5" offset-md="2" sm="2">
+    <b-col sm="6">
       <h3><b>Movies</b></h3>
-      <ol><li v-for="movies in moviesdata" :key="movies" @click="show=movies.id">{{movies.name}}</li>
+      <ol><li v-for="movies in moviesdata" :key="movies">
+        <b-button size='' variant="link"  @click="show=movies.id">
+                {{movies.name}}
+            </b-button>
+      </li>
       </ol> 
     </b-col>
-    <b-col>
+    <b-col sm="6">
       <moviedetails>
-        <br>
         <h3><b>Movie Details</b></h3>
-        <span v-if="show==''">Select a Movie</span>
+        <span v-if="!(show>=0)">Select a Movie</span>
           <span v-for="movies in moviesdata">
             <span v-if="movies.id==show">
           <ul>
@@ -74,7 +76,7 @@ export default {
         moviesdata: '' ,
         actorsdata: '',
         producersdata: '',
-        show:''
+        show: this.newmov,
     }
   },
  
@@ -117,3 +119,10 @@ methods: {
 }
 </script>
 
+<style>
+.home  {
+  margin-left: 10%;
+  border: 3pt;
+  
+}
+</style>

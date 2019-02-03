@@ -4,7 +4,7 @@
       <hr><h2>
       <router-link to="/">Home</router-link> |
       <router-link to="/add">Add</router-link></h2>
-      <hr><hr>
+      <hr>
     </div>
     <router-view/>
   </div>
