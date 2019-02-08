@@ -8,12 +8,16 @@
       <b-row>
         <b-col sm="6">
           <b-form-group
-                    label="Actor Name:">
-        <b-form-input 
+                    label="Actor Name: *">
+        <b-form-input v-validate="'alpha|required'"
+                        name = "aname"
                       type="text"
                       v-model="actorsobj.name"
                       placeholder="Enter Name">
         </b-form-input>
+        <span>
+                          {{ errors.first('aname')}}
+                        </span>
       </b-form-group>
 
     <b-form-group
@@ -133,13 +137,17 @@ export default {
     
     methods: {
         submitActor() {
+          var self = this
+    this.$validator.validateAll().then(result => {
+      if(result) {
             this.actorsobj.id++;
             // axios.post('http://localhost:3000/actors',this.actorsobj);
             // this.$emit('newValue',!this.newact)
-            var self = this; 
+            
             axios.post('http://localhost:3000/actors',this.actorsobj).then(function(){
                self.$emit('newValue',false,false)
             });
+      }})
             
         },
         cancel() {

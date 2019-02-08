@@ -9,13 +9,18 @@
         <b-row>
           <b-col sm="6">
             <b-form-group
-                      label="Movie Name:"
+                      label="Movie Name: *"
                       description="This name will be displayed in the Home Page">
-          <b-form-input v-validate="'required'"
+          <b-form-input v-validate="'alpha|required'"
+                        name = "mname"
                         type="text"
                         v-model="moviesobj.name"
                         placeholder="Enter Name">
+                        
           </b-form-input>
+          <span>
+                          {{ errors.first('mname')}}
+                        </span>
         </b-form-group>
           <!-- <span>Name of the Movie  </span>
           <input type="text" v-model="moviesobj.name"><br><br> -->
@@ -34,13 +39,18 @@
           <input type="date" v-model="moviesobj.yearOfRelease"><br><br> -->
           
           <b-form-group
-                      label="Plot of the Movie:">
+                      label="Plot of the Movie: *">
           <b-form-textarea
+          v-validate="'alpha|required'"
+                        name = "plot"
                         type="text"
                         rows="3"
                         v-model="moviesobj.plot"
                         placeholder="Enter Plot">
           </b-form-textarea>
+           <span>
+                          {{ errors.first('plot')}}
+                        </span>
         </b-form-group>
 
           <!-- <span>Plot of the Movie  </span><br>
@@ -242,27 +252,34 @@ export default {
   methods: {
     submitMovie() {
       // alert("here")
+      var self = this
+    this.$validator.validateAll().then(result => {
+      if(result) {
       if(this.movid>=0)
       {
-        alert("edit")
-        var self=this
+        
+        
         axios.put('http://localhost:3000/movies/'+this.movid,this.moviesobj).then(function(){
                
                self.$router.push({ name : "home", params: {newmov:self.moviesobj.id}})})
               //  alert("movie edited")
       }
       else {
-        
+      
       this.moviesobj.id++
       // alert(this.newactor)
       // alert(this.moviesobj)
-      var self = this
+      
       axios.post('http://localhost:3000/movies',this.moviesobj).then(function(){
                
                self.$router.push({ name : "home", params: {newmov:self.moviesobj.id}})})
       }
-      
-    },
+      }
+      else
+      {
+        alert("Enter proper details")
+      } 
+    })},
     prodfunc(p,c) {
       
         this.newproducer=p

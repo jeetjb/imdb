@@ -8,12 +8,16 @@
             <b-row>
                 <b-col sm="6">
                 <b-form-group
-                            label="Producer Name:">
-                    <b-form-input 
+                            label="Producer Name: *">
+                    <b-form-input v-validate="'alpha|required'"
+                        name = "pname"
                             type="text"
                             v-model="producersobj.name"
                             placeholder="Enter Name">
                     </b-form-input>
+                    <span>
+                          {{ errors.first('pname')}}
+                        </span>
                 </b-form-group>
 
                 <b-form-group
@@ -133,14 +137,18 @@ export default {
     
     methods: {
         submitProducer() {
+            var self = this
+    this.$validator.validateAll().then(result => {
+      if(result) {
             this.producersobj.id++;
             // axios.post('http://localhost:3000/producers',this.producersobj);
             // this.$emit('newValue',!this.newprod)
-            var self = this; 
+           
             
             axios.post('http://localhost:3000/producers',this.producersobj).then(function(){
                self.$emit('newValue',false, false)
             });
+      }})
     },
     cancel() {
         this.$emit('newValue',false, true)
