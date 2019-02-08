@@ -4,7 +4,6 @@
     <h1><b>Add Movies</b></h1><br>
       <b-form>
          
-         
   <b-container fluid class="bv-example-row">
     
         <b-row>
@@ -12,7 +11,7 @@
             <b-form-group
                       label="Movie Name:"
                       description="This name will be displayed in the Home Page">
-          <b-form-input 
+          <b-form-input v-validate="'required'"
                         type="text"
                         v-model="moviesobj.name"
                         placeholder="Enter Name">
@@ -64,7 +63,7 @@
                   
                 <b-form-checkbox-group v-model="moviesobj.actors">
                 <ol>
-                <li v-for="act in actorsdata" :key="act">
+                <li v-for="act in actorsdata" >
                 <b-form-checkbox :value="act.id">&nbsp;&nbsp;{{act.name}}</b-form-checkbox>
                 </li>
                 </ol>
@@ -92,7 +91,7 @@
             <b-form-group
                       label="Select Producer:">
             <b-form-select v-model="moviesobj.producer" class="mb-3" size="sm">
-                <option v-for="pro in producersdata" :key="pro" :value="pro.id">
+                <option v-for="pro in producersdata"  :value="pro.id">
               {{ pro.name }} 
             </option>
         
@@ -148,9 +147,11 @@ import newact from '../components/newActor'
 import newprod from '../components/newProducer'
 import axios from 'axios'
 export default {
+  props : ["movid"],
   data()  {
+    
     return   {
-      
+      mov:-1,
       moviesobj: {
         id:0,
         name:'',
@@ -160,40 +161,34 @@ export default {
         actors:[],
         producer:1,
       },
-      actorsobj: {
-        id:0,
-        name:'',
-        sex:'',
-        dateOfBirth:'',
-        bio:'',
-        movies:[],
-      },
-      producersobj: {
-        id:0,
-        name:'',
-        sex:'',
-        dateOfBirth:'',
-        bio:'',
-        movies:[],
-      },
+      // actorsobj: {
+      //   id:0,
+      //   name:'',
+      //   sex:'',
+      //   dateOfBirth:'',
+      //   bio:'',
+      //   movies:[],
+      // },
+      // producersobj: {
+      //   id:0,
+      //   name:'',
+      //   sex:'',
+      //   dateOfBirth:'',
+      //   bio:'',
+      //   movies:[],
+      // },
       moviesdata: '' ,
       actorsdata: '',
       producersdata: '',
       newactor:false,
       newproducer:false,
-      lab1:false,
-      lab2:false,
-      lab:false,
-      lab3:false,
-      noup:false,
+      // lab1:false,
+      // lab2:false,
+      // lab:false,
+      // lab3:false,
+      // noup:false,
 
-      selected: [], // Must be an array reference!
-      options: [
-        {text: 'Orange', value: 'orange'},
-        {text: 'Apple', value: 'apple'},
-        {text: 'Pineapple', value: 'pineapple'},
-        {text: 'Grape', value: 'grape'}
-      ]
+     
     }
   },
   components : {
@@ -205,91 +200,154 @@ export default {
 //         return this.newactor, this.newproducer, Date.now();
 //     }
 // },
-  watch : {
-    newactor :function() {
-      axios.get('http://localhost:3000/actors')
-      .then(res => {
-        console.log(res)
-        this.actorsdata = res.data
-        this.actorsobj.id=this.actorsdata.length
-        if(!this.noup) {
-        if(this.lab1 && this.lab) {
-        this.moviesobj.actors.push(this.actorsdata[this.actorsdata.length-1].id)
-        this.lab1=false
-        }
-        this.lab=!this.lab
-      }
-      })
-      .catch(error => console.log(error))
+  // watch : {
+    // newactor :function() {
+      // axios.get('http://localhost:3000/actors')
+      // .then(res => {
+      //   console.log(res)
+      //   this.actorsdata = res.data
+      //   this.actorsobj.id=this.actorsdata.length
+      //   if(!this.noup) {
+      //   if(this.lab1 && this.lab) {
+      //   this.moviesobj.actors.push(this.actorsdata[this.actorsdata.length-1].id)
+      //   this.lab1=false
+      //   }
+      //   this.lab=!this.lab
+      // }
+      // })
+      // .catch(error => console.log(error))
       
       
-    },
-    newproducer :function() {
+    // },
+    // newproducer :function() {
 
-      axios.get('http://localhost:3000/producers')
-      .then(res => {
-        console.log(res)
-        this.producersdata = res.data
-        this.producersobj.id=this.producersdata.length
-        if(!this.noup) {
-        if(this.lab2 && this.lab3) {
-        this.moviesobj.producer=this.producersdata[this.producersdata.length-1].id
-        this.lab2=false
-      }
-      this.lab3=!this.lab3
-      }
-      })
-      .catch(error => console.log(error))
+    //   axios.get('http://localhost:3000/producers')
+    //   .then(res => {
+    //     console.log(res)
+    //     this.producersdata = res.data
+    //     this.producersobj.id=this.producersdata.length
+    //     if(!this.noup) {
+    //     if(this.lab2 && this.lab3) {
+    //     this.moviesobj.producer=this.producersdata[this.producersdata.length-1].id
+    //     this.lab2=false
+    //   }
+    //   this.lab3=!this.lab3
+    //   }
+    //   })
+    //   .catch(error => console.log(error))
       
-    },
-  },
+    // },
+   
+  // },
   methods: {
     submitMovie() {
+      // alert("here")
+      if(this.movid>=0)
+      {
+        alert("edit")
+        var self=this
+        axios.put('http://localhost:3000/movies/'+this.movid,this.moviesobj).then(function(){
+               
+               self.$router.push({ name : "home", params: {newmov:self.moviesobj.id}})})
+              //  alert("movie edited")
+      }
+      else {
+        
       this.moviesobj.id++
+      // alert(this.newactor)
+      // alert(this.moviesobj)
       var self = this
       axios.post('http://localhost:3000/movies',this.moviesobj).then(function(){
                
                self.$router.push({ name : "home", params: {newmov:self.moviesobj.id}})})
+      }
       
     },
     prodfunc(p,c) {
       
         this.newproducer=p
-        this.noup=c
+        if(c==false)
+        {
+          
+          axios.get('http://localhost:3000/producers')
+        .then(res => {
+        console.log(res);
+        this.producersdata = res.data;
+        this.moviesobj.producer=this.producersdata[this.producersdata.length-1].id;
+        
+      }
+      )
+      .catch(error => console.log(error))
+        }
       },
       actfunc(a,c) {
       
         this.newactor=a
-        this.noup=c
+        if(c==false)
+        {
+          axios.get('http://localhost:3000/actors')
+      .then(res => {
+        console.log(res)
+        this.actorsdata = res.data
+        this.moviesobj.actors.push(this.actorsdata[this.actorsdata.length-1].id)
+        
       }
+      )
+      .catch(error => console.log(error))
+        }
+      },
+      getMovies() {
+    return axios.get('http://localhost:3000/movies')
+      .then(res => {
+        console.log(res)
+        this.moviesdata = res.data
+        this.moviesobj.id = this.moviesdata.length
+      })
+      .catch(error => console.log(error))
+  },
+  getActors() {
+    axios.get('http://localhost:3000/actors')
+      .then(res => {
+        console.log(res)
+        this.actorsdata = res.data
+      })
+      .catch(error => console.log(error))
+  },
+  getProducers() {
+     axios.get('http://localhost:3000/producers')
+      .then(res => {
+        console.log(res)
+        this.producersdata = res.data
+      })
+      .catch(error => console.log(error))
+  },
+   checkmovie :function() {
+      // alert("checkmovie")
+      if(this.movid>=0) {
+        // alert("if")
+        axios.get("http://localhost:3000/movies/"+this.movid)
+        .then(res => {
+        console.log(res)
+        this.moviesobj = res.data
+        
+      })
+      .catch(error => console.log(error))
+      }
+      // alert("check end")
+    }
     },
 
     created()
     {
-      axios.get('http://localhost:3000/movies')
-      .then(res => {
-        console.log(res)
-        this.moviesdata = res.data
-        this.moviesobj.id=this.moviesdata.length
-      })
-      .catch(error => console.log(error))
 
-      axios.get('http://localhost:3000/actors')
-      .then(res => {
-        console.log(res)
-        this.actorsdata = res.data
-        this.actorsobj.id=this.actorsdata.length
-      })
-      .catch(error => console.log(error))
-
-      axios.get('http://localhost:3000/producers')
-      .then(res => {
-        console.log(res)
-        this.producersdata = res.data
-        this.producersobj.id=this.producersdata.length
-      })
-      .catch(error => console.log(error))
+      this.getMovies()
+      this.getActors()
+      this.getProducers()
+      
+      this.checkmovie()
+         
     },
+    
 
     
     }

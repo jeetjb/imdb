@@ -50,7 +50,7 @@
                 
               <b-form-checkbox-group v-model="actorsobj.movies">
               <ol>
-              <li v-for="mov in moviesdata" :key="mov">
+              <li v-for="mov in moviesdata" >
               <b-form-checkbox :value="mov.id">&nbsp;&nbsp;{{mov.name}}</b-form-checkbox>
               </li>
               </ol>
@@ -106,7 +106,6 @@
                 <button v-on:click.prevent="submitActor">Submit</button>    <button type="button" v-on:click.prevent="cancel">Cancel</button> -->
             </form>
 
-            {{newValue}}
         </div>    
 </template>
 
@@ -127,8 +126,8 @@ export default {
             }, 
             moviesdata: '',   
             actorsdata: '' ,
-            newact:true,
-            noup:false
+            // newact:true,
+            // noupdate:false
         }
     },
     
@@ -139,12 +138,12 @@ export default {
             // this.$emit('newValue',!this.newact)
             var self = this; 
             axios.post('http://localhost:3000/actors',this.actorsobj).then(function(){
-               self.$emit('newValue',!self.newact,self.noup)
+               self.$emit('newValue',false,false)
             });
             
         },
         cancel() {
-        this.$emit('newValue',!this.newact, !this.noup)
+        this.$emit('newValue',false, true)
     }
     
     },
@@ -154,7 +153,6 @@ export default {
         .then(res => {
         console.log(res)
         this.moviesdata = res.data
-        this.moviesobj.id=this.moviesdata.length
       })
       .catch(error => console.log(error))
 

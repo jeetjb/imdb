@@ -18,6 +18,7 @@ export default new Router({
     {
       path: '/add',
       name: 'add',
+      props: true,
       component: Add
     }
   ]

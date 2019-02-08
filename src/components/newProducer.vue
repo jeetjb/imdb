@@ -45,13 +45,13 @@
             
                </b-col>
                 <b-col sm="6">
-                <span class="notbold">
+                <span>
                     <b-form-group label="Select Movies:">
                         
                     <b-form-checkbox-group v-model="producersobj.movies">
                     <ol>
-                    <li v-for="mov in moviesdata" :key="mov">
-                    <b-form-checkbox :value="mov.id">&nbsp;&nbsp;{{mov.name}}</b-form-checkbox>
+                    <li v-for="mov in moviesdata" >
+                    <b-form-checkbox :value="mov.id" class="notbold">&nbsp;&nbsp;{{mov.name}}</b-form-checkbox>
                     </li>
                     </ol>
                     </b-form-checkbox-group>
@@ -125,8 +125,8 @@ export default {
             moviesdata: '',   
             producersdata: '' ,
             
-                newprod:true,
-                noup:false
+                // newprod:true,
+                // noupdate:false
             
         }
     },
@@ -139,11 +139,11 @@ export default {
             var self = this; 
             
             axios.post('http://localhost:3000/producers',this.producersobj).then(function(){
-               self.$emit('newValue',!self.newprod, self.noup)
+               self.$emit('newValue',false, false)
             });
     },
     cancel() {
-        this.$emit('newValue',!this.newprod, !this.noup)
+        this.$emit('newValue',false, true)
     }
     },
     created() {
@@ -152,7 +152,7 @@ export default {
         .then(res => {
         console.log(res)
         this.moviesdata = res.data
-        this.moviesobj.id=this.moviesdata.length
+        
       })
       .catch(error => console.log(error))
 
@@ -168,3 +168,9 @@ export default {
 </script>
 
 
+<style>
+.notbold {
+    font-weight: normal !important ;
+    
+}
+</style>
