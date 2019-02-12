@@ -17,29 +17,27 @@
         
           <span v-for="movies in moviesdata">
             <span v-if="movies.id==show">
+          <img :src="movies.poster" width="100px" height="100px"/> 
+          <br><br>
           <ul>
+            
           <li><b>Movie Name : </b>{{movies.name}}</li>
           <li><b>Year of Release :</b> {{movies.yearOfRelease}}</li>
           <li><b>Actors : </b>
             <ol>
-              <div v-for="actors in actorsdata" >
+              
+              <div style="margin-left:5%" v-for="actors in actorsdata">
                 <li v-if="(actors.id==movies.actors[0] || actors.id==movies.actors[1] || actors.id==movies.actors[2])">
                   {{ actors.name }}
                 </li>
-                <!-- <li>
-                  {{funt2(movies.actors,actors)}}
-                </li> -->
+               
               </div>
             </ol>
-          <!-- <span> {{ funt2(actorsdata,movies) }} </span> -->
+          
           </li>
           <li><b>Producers :</b> 
             
-              <!-- <span v-for="producers in producersdata" :key="producers">
-                <span v-if="(producers.id==movies.producer)">
-                  {{ producers.name }}
-                </span>
-              </span> -->
+             
             <span> {{ filterProducer(producersdata,movies) }} </span>
 
           </li>
@@ -92,7 +90,9 @@ methods: {
         console.log(res)
         this.moviesdata = res.data
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)|
+      alert("Axios get Failed"))
+      
   },
   getActors() {
     axios.get('http://localhost:3000/actors')
@@ -100,7 +100,8 @@ methods: {
         console.log(res)
         this.actorsdata = res.data
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)|
+      alert("Axios get Failed"))
   },
   getProducers() {
      axios.get('http://localhost:3000/producers')
@@ -108,22 +109,21 @@ methods: {
         console.log(res)
         this.producersdata = res.data
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)|
+      alert("Axios get Failed"))
   },
   filterProducer(data1,data2) {
     var res = data1.filter(dat => dat.id==data2.producer);
     return res[0].name;
     
   },
-  // funt2(data1,data2) {
-  //   var res = data1.filter(dat => dat==data2.id);;
-  //   return res;
-  // }
+ 
   deletemovie(id) {
     let self = this;
     axios.delete("http://localhost:3000/movies/"+id)
-    .then(self.getMovies); // fetch new list here
-    // this.del=!this.del;
+    .then(self.getMovies)
+    .catch(error => console.log(error)|
+      alert("Axios delete Failed")); 
     this.show='';
     
   },
@@ -131,17 +131,7 @@ methods: {
     this.$router.push({ name : "add", params: {movid:id}})
   }
 },
-// watch : {
-//   del() {
-//     axios.get('http://localhost:3000/movies')
-//       .then(res => {
-//         console.log(res)
-//         this.moviesdata = res.data
-//       })
-//       .catch(error => console.log(error))
-//   }
-// },
-  // methods: {
+
     created()
     {
       this.getMovies()
@@ -151,7 +141,7 @@ methods: {
 
      
     }
-  // }
+
 
 }
 </script>

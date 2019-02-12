@@ -1,6 +1,12 @@
 <template>
     <div>
         
+<div class="modal is-active">
+    <div class = "modal-background">
+    </div>
+    <div class = "modal-content">
+        <div class="box">
+
         <h2><b>New Producer</b></h2>
         <br>
         <form>
@@ -9,32 +15,42 @@
                 <b-col sm="6">
                 <b-form-group
                             label="Producer Name: *">
-                    <b-form-input v-validate="'alpha|required'"
-                        name = "pname"
+                    <b-form-input v-validate="'alpha_spaces|required'"
+                        name = "producer name"
                             type="text"
                             v-model="producersobj.name"
                             placeholder="Enter Name">
                     </b-form-input>
-                    <span>
-                          {{ errors.first('pname')}}
+                    <span style="color=red">
+                          {{ errors.first('producer name')}}
                         </span>
                 </b-form-group>
 
                 <b-form-group
                                 label="Sex:">
-                <b-form-radio-group v-model="producersobj.sex">
+                <b-form-radio-group v-model="producersobj.sex"
+                v-validate="'required'"
+      name = "sex">
                     <b-form-radio value="M">&nbsp;&nbsp;Male</b-form-radio>
                     <b-form-radio value="F">&nbsp;&nbsp;Female</b-form-radio>
                                 
                 </b-form-radio-group>
+                <span style="color=red">
+                          {{ errors.first('sex')}}
+                        </span>
                 </b-form-group>
 
                 <b-form-group
                             label="Date of Birth:">
                 <b-form-input 
                             type="date"
-                            v-model="producersobj.dateOfBirth">
+                            v-model="producersobj.dateOfBirth"
+                            v-validate="'required'"
+      name = "date of birth">
                 </b-form-input>
+                <span style="color=red">
+                          {{ errors.first('date of birth')}}
+                        </span>
             </b-form-group>
 
                 <b-form-group
@@ -74,41 +90,10 @@
                 
             </form>
 
-
-          <!-- <h3>New Producer</h3>
-          
-            <form>
-        
-        <span>Name  </span>
-        <input type="text" v-model="producersobj.name"><br><br>
-
-        <span>Sex  </span><br>
-        <input type="radio" value="M" v-model="producersobj.sex">
-        <label>Male</label><br>
-        <input type="radio" value="F" v-model="producersobj.sex">
-        <label>Female</label>
-        <br><br>
-
-        <span>Date of Birth  </span>
-        <input type="date" v-model="producersobj.dateOfBirth"><br><br>
-        
-        <span>Bio  </span>
-        <input type="text" v-model="producersobj.bio"><br><br>
-        
-        <span>Movies</span><br>
-          <ul>
-          <li v-for="mov in moviesdata" :key="mov">
-          <input type="checkbox" 
-            :value="mov.id"  
-            v-model="producersobj.movies" 
-          > {{mov.id}}.  {{mov.name}}
-          </li>
-          
-          </ul>
-          <br><br>
-          <button v-on:click.prevent="submitProducer">Submit</button>    <button type="button" v-on:click.prevent="cancel">Cancel</button> -->
-
-            <!-- </form> -->
+</div>
+    </div>
+    
+</div>
         </div>
 </template>
 
@@ -129,8 +114,7 @@ export default {
             moviesdata: '',   
             producersdata: '' ,
             
-                // newprod:true,
-                // noupdate:false
+              
             
         }
     },
@@ -141,16 +125,30 @@ export default {
     this.$validator.validateAll().then(result => {
       if(result) {
             this.producersobj.id++;
-            // axios.post('http://localhost:3000/producers',this.producersobj);
-            // this.$emit('newValue',!this.newprod)
            
             
             axios.post('http://localhost:3000/producers',this.producersobj).then(function(){
+                self.producersobj.name=''
+                self.producersobj.sex=''
+                self.producersobj.dateOfBirth=''
+                self.producersobj.bio=''
+                self.producersobj.movies=[]
                self.$emit('newValue',false, false)
             });
-      }})
+      }
+      else {
+
+        alert("Enter proper details")
+      } 
+      })
     },
     cancel() {
+        var self= this
+        self.producersobj.name=''
+                self.producersobj.sex=''
+                self.producersobj.dateOfBirth=''
+                self.producersobj.bio=''
+                self.producersobj.movies=[]
         this.$emit('newValue',false, true)
     }
     },

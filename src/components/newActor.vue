@@ -1,5 +1,13 @@
 <template>
     <div>
+
+        <div class="modal is-active">
+    <div class = "modal-background">
+    </div>
+    <div class = "modal-content">
+        <div class="box">
+        
+
           <h2><b>New Actor</b></h2>
           <br>
             <form>
@@ -9,32 +17,42 @@
         <b-col sm="6">
           <b-form-group
                     label="Actor Name: *">
-        <b-form-input v-validate="'alpha|required'"
-                        name = "aname"
+        <b-form-input v-validate="'alpha_spaces|required'"
+                        name = "actor name"
                       type="text"
                       v-model="actorsobj.name"
                       placeholder="Enter Name">
         </b-form-input>
-        <span>
-                          {{ errors.first('aname')}}
+        <span style="color=red">
+                          {{ errors.first('actor name')}}
                         </span>
       </b-form-group>
 
     <b-form-group
                     label="Sex:">
-      <b-form-radio-group v-model="actorsobj.sex">
+      <b-form-radio-group v-model="actorsobj.sex"
+      v-validate="'required'"
+      name = "sex">
         <b-form-radio value="M">&nbsp;&nbsp;Male</b-form-radio>
         <b-form-radio value="F">&nbsp;&nbsp;Female</b-form-radio>
                     
       </b-form-radio-group>
+      <span style="color=red">
+                          {{ errors.first('sex')}}
+                        </span>
       </b-form-group>
 
         <b-form-group
                     label="Date of Birth:">
         <b-form-input 
                       type="date"
-                      v-model="actorsobj.dateOfBirth">
+                      v-model="actorsobj.dateOfBirth"
+                      v-validate="'required'"
+      name = "date of birth">
         </b-form-input>
+         <span style="color=red">
+                          {{ errors.first('date of birth')}}
+                        </span>
       </b-form-group>
 
         <b-form-group
@@ -74,41 +92,13 @@
         <b-button size="mb" variant="primary" v-on:click.prevent="cancel">Cancel</b-button>
         
 
-
-
-
-<!-- 
-
-              <span>Name  </span>
-              <input type="text" v-model="actorsobj.name"><br><br>
-
-              <span>Sex  </span><br>
-              <input type="radio" value="M" v-model="actorsobj.sex">
-              <label>Male</label><br>
-              <input type="radio" value="F" v-model="actorsobj.sex">
-              <label>Female</label>
-              
-              <br><br>
-
-              <span>Date of Birth  </span>
-              <input type="date" v-model="actorsobj.dateOfBirth"><br><br>
-              
-              <span>Bio  </span>
-              <input type="text" v-model="actorsobj.bio"><br><br>
-              
-              <span>Movies</span><br>
-                <ul>
-                <li v-for="mov in moviesdata" :key="mov">
-                <input type="checkbox" 
-                  :value="mov.id"  
-                  v-model="actorsobj.movies" 
-                > {{mov.id}}.  {{mov.name}}
-                </li>
-                
-                </ul>
-                <br><br>
-                <button v-on:click.prevent="submitActor">Submit</button>    <button type="button" v-on:click.prevent="cancel">Cancel</button> -->
             </form>
+
+    
+        </div>
+    </div>
+    
+</div>
 
         </div>    
 </template>
@@ -130,8 +120,7 @@ export default {
             }, 
             moviesdata: '',   
             actorsdata: '' ,
-            // newact:true,
-            // noupdate:false
+            
         }
     },
     
@@ -141,16 +130,30 @@ export default {
     this.$validator.validateAll().then(result => {
       if(result) {
             this.actorsobj.id++;
-            // axios.post('http://localhost:3000/actors',this.actorsobj);
-            // this.$emit('newValue',!this.newact)
             
             axios.post('http://localhost:3000/actors',this.actorsobj).then(function(){
+              
+                self.actorsobj.name=''
+                self.actorsobj.sex=''
+                self.actorsobj.dateOfBirth=''
+                self.actorsobj.bio=''
+                self.actorsobj.movies=[]
                self.$emit('newValue',false,false)
             });
-      }})
+      }
+      else {
+        alert("Enter Proper Details")
+      }
+      })
             
         },
         cancel() {
+          var self = this
+          self.actorsobj.name=''
+                self.actorsobj.sex=''
+                self.actorsobj.dateOfBirth=''
+                self.actorsobj.bio=''
+                self.actorsobj.movies=[]
         this.$emit('newValue',false, true)
     }
     

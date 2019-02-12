@@ -1,6 +1,7 @@
 <template>
   <div class="Add">
-    <div v-show="!newactor && !newproducer">
+    <!-- <div v-show="!newactor && !newproducer"> -->
+      <div>
     <h1><b>Add Movies</b></h1><br>
       <b-form>
          
@@ -11,19 +12,17 @@
             <b-form-group
                       label="Movie Name: *"
                       description="This name will be displayed in the Home Page">
-          <b-form-input v-validate="'alpha|required'"
-                        name = "mname"
+          <b-form-input v-validate="'alpha_spaces|required'"
+                        name = "movie name"
                         type="text"
                         v-model="moviesobj.name"
                         placeholder="Enter Name">
                         
           </b-form-input>
           <span>
-                          {{ errors.first('mname')}}
+                          {{ errors.first('movie name')}}
                         </span>
         </b-form-group>
-          <!-- <span>Name of the Movie  </span>
-          <input type="text" v-model="moviesobj.name"><br><br> -->
 
           <b-form-group
                       label="Date of Release:"
@@ -35,13 +34,11 @@
           </b-form-input>
         </b-form-group>
 
-          <!-- <span>Date of Release  </span>
-          <input type="date" v-model="moviesobj.yearOfRelease"><br><br> -->
           
           <b-form-group
                       label="Plot of the Movie: *">
           <b-form-textarea
-          v-validate="'alpha|required'"
+          v-validate="'alpha_spaces|required'"
                         name = "plot"
                         type="text"
                         rows="3"
@@ -53,8 +50,6 @@
                         </span>
         </b-form-group>
 
-          <!-- <span>Plot of the Movie  </span><br>
-          <textarea v-model="moviesobj.plot"></textarea><br><br> -->
           
           <b-form-group
                       label="Poster Image Link:">
@@ -64,39 +59,28 @@
                         placeholder="Enter Link">
           </b-form-input>
         </b-form-group>
-        <!-- <b-button v-on:click.prevent="submitMovie">Submit</b-button> -->
         
           </b-col>
           <b-col sm="6">
             <span class="notbold">
-                <b-form-group label="Select Actors:">
+                <b-form-group label="Select Actors: *">
                   
-                <b-form-checkbox-group v-model="moviesobj.actors">
+                <b-form-checkbox-group v-model="moviesobj.actors"
+                v-validate="'required'"
+                name = "actors">
                 <ol>
                 <li v-for="act in actorsdata" >
                 <b-form-checkbox :value="act.id">&nbsp;&nbsp;{{act.name}}</b-form-checkbox>
                 </li>
                 </ol>
                 </b-form-checkbox-group>
+                 <span>
+                          {{ errors.first('actors')}}
+                        </span>
                 </b-form-group> 
             </span>
-            <b-button type="button" size="sm" variant="primary" @click="newactor=true , lab1=true">Add New</b-button>
-      <!-- <b-form-group label="Stacked (vertical) button style checkboxes">
-        <b-form-checkbox-group buttons v-model="selected" stacked :options="options">
-        </b-form-checkbox-group>
-      </b-form-group> -->
-
-            <!-- <span>Actors</span><br>
-            <ol>
-            <li v-for="act in actorsdata" :key="act">
-            <input type="checkbox" 
-              :value="act.id"  
-              v-model="moviesobj.actors" 
-            >   {{act.name}}
-            </li>
-            </ol> -->
-            <!-- <input type="button" value="Add New" @click="newactor=true , lab1=true"> -->
-            <br><br>
+            <b-button type="button" size="sm" variant="primary" @click="newactor=true">Add New</b-button>
+     <br><br>
             
             <b-form-group
                       label="Select Producer:">
@@ -107,47 +91,29 @@
         
       </b-form-select>
         </b-form-group>
-      <b-button type="button" size="sm" variant="primary" @click="newproducer=true , lab2=true">Add New</b-button>
-            <!-- Producer :
-            <select v-model="moviesobj.producer">
-            <option v-for="pro in producersdata" :key="pro" :value="pro.id">
-              {{ pro.name }} 
-            </option>
-            </select>
-            &nbsp;&nbsp;&nbsp;
+      <b-button type="button" size="sm" variant="primary" @click="newproducer=true">Add New</b-button>
             
-            <input type="button" value="Add New" @click="newproducer=true , lab2=true"> -->
             <br><br>
           </b-col>
         </b-row>
     <b-button size="" variant="primary" v-on:click.prevent="submitMovie">Submit</b-button>
     
   </b-container>
-        <!-- <span>Poster Image  </span>
-        <input type="text" v-model="moviesobj.poster"><br><br> -->
         
-        
-          <!-- <button v-on:click.prevent="submitMovie">Submit</button> -->
           </b-form>
           
         </div>
         
 
         <div v-show="newactor">
-          <newact @newValue="actfunc"></newact>
-          <!-- <template v-if="lab1">
-          {{moviesobj.actors.push(actorsdata[actorsdata.length-1].id)}}
-          {{lab1=false}}
-          </template> -->
+          <newact @newValue="toggleActor"></newact>
+          
         </div>
 
         <div v-show="newproducer">
-          <newprod @newValue="prodfunc"></newprod>
+          <newprod @newValue="toggleProducer"></newprod>
           
-          <!-- <template v-if="lab2">
-          {{moviesobj.producer=producersdata[producersdata.length-1].id}}
-          {{lab2=false}}
-          </template> -->
+          
         </div>
         
   </div>
@@ -171,32 +137,13 @@ export default {
         actors:[],
         producer:1,
       },
-      // actorsobj: {
-      //   id:0,
-      //   name:'',
-      //   sex:'',
-      //   dateOfBirth:'',
-      //   bio:'',
-      //   movies:[],
-      // },
-      // producersobj: {
-      //   id:0,
-      //   name:'',
-      //   sex:'',
-      //   dateOfBirth:'',
-      //   bio:'',
-      //   movies:[],
-      // },
+      
       moviesdata: '' ,
       actorsdata: '',
       producersdata: '',
       newactor:false,
       newproducer:false,
-      // lab1:false,
-      // lab2:false,
-      // lab:false,
-      // lab3:false,
-      // noup:false,
+      
 
      
     }
@@ -205,53 +152,9 @@ export default {
     newact,
     newprod
   },
-//   computed: {
-//     computedProperty() {
-//         return this.newactor, this.newproducer, Date.now();
-//     }
-// },
-  // watch : {
-    // newactor :function() {
-      // axios.get('http://localhost:3000/actors')
-      // .then(res => {
-      //   console.log(res)
-      //   this.actorsdata = res.data
-      //   this.actorsobj.id=this.actorsdata.length
-      //   if(!this.noup) {
-      //   if(this.lab1 && this.lab) {
-      //   this.moviesobj.actors.push(this.actorsdata[this.actorsdata.length-1].id)
-      //   this.lab1=false
-      //   }
-      //   this.lab=!this.lab
-      // }
-      // })
-      // .catch(error => console.log(error))
-      
-      
-    // },
-    // newproducer :function() {
-
-    //   axios.get('http://localhost:3000/producers')
-    //   .then(res => {
-    //     console.log(res)
-    //     this.producersdata = res.data
-    //     this.producersobj.id=this.producersdata.length
-    //     if(!this.noup) {
-    //     if(this.lab2 && this.lab3) {
-    //     this.moviesobj.producer=this.producersdata[this.producersdata.length-1].id
-    //     this.lab2=false
-    //   }
-    //   this.lab3=!this.lab3
-    //   }
-    //   })
-    //   .catch(error => console.log(error))
-      
-    // },
-   
-  // },
   methods: {
     submitMovie() {
-      // alert("here")
+      
       var self = this
     this.$validator.validateAll().then(result => {
       if(result) {
@@ -262,17 +165,19 @@ export default {
         axios.put('http://localhost:3000/movies/'+this.movid,this.moviesobj).then(function(){
                
                self.$router.push({ name : "home", params: {newmov:self.moviesobj.id}})})
-              //  alert("movie edited")
+               .catch(error => console.log(error)|
+      alert("Axios put Failed"))
+              
       }
       else {
       
       this.moviesobj.id++
-      // alert(this.newactor)
-      // alert(this.moviesobj)
       
       axios.post('http://localhost:3000/movies',this.moviesobj).then(function(){
                
                self.$router.push({ name : "home", params: {newmov:self.moviesobj.id}})})
+               .catch(error => console.log(error)|
+      alert("Axios put Failed"))
       }
       }
       else
@@ -280,10 +185,10 @@ export default {
         alert("Enter proper details")
       } 
     })},
-    prodfunc(p,c) {
+    toggleProducer(producer,cancel) {
       
-        this.newproducer=p
-        if(c==false)
+        this.newproducer=producer
+        if(cancel==false)
         {
           
           axios.get('http://localhost:3000/producers')
@@ -294,13 +199,15 @@ export default {
         
       }
       )
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)
+      |
+      alert("Axios get Failed"))
         }
       },
-      actfunc(a,c) {
+      toggleActor(actor,cancel) {
       
-        this.newactor=a
-        if(c==false)
+        this.newactor=actor
+        if(cancel==false)
         {
           axios.get('http://localhost:3000/actors')
       .then(res => {
@@ -310,7 +217,9 @@ export default {
         
       }
       )
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)
+      |
+      alert("Axios get Failed"))
         }
       },
       getMovies() {
@@ -320,7 +229,9 @@ export default {
         this.moviesdata = res.data
         this.moviesobj.id = this.moviesdata.length
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)
+      |
+      alert("Axios get Failed"))
   },
   getActors() {
     axios.get('http://localhost:3000/actors')
@@ -328,7 +239,8 @@ export default {
         console.log(res)
         this.actorsdata = res.data
       })
-      .catch(error => console.log(error))
+      .catch(error => console.log(error)
+      )
   },
   getProducers() {
      axios.get('http://localhost:3000/producers')
